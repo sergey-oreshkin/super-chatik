@@ -5,18 +5,9 @@ import home.serg.chatik.dao.Entity;
 public class User extends Entity<Long> {
     private String username;
     private String password;
-
     private Role role;
 
     public User() {
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public User(String username, String password, Role role) {
@@ -39,5 +30,13 @@ public class User extends Entity<Long> {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

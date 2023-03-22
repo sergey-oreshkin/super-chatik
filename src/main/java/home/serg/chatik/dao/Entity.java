@@ -1,6 +1,6 @@
 package home.serg.chatik.dao;
 
-public abstract class Entity <T>{
+public abstract class Entity<T> {
     private T id;
 
     public T getId() {
