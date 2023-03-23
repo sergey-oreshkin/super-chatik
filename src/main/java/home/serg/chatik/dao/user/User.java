@@ -6,14 +6,16 @@ public class User extends Entity<Long> {
     private String username;
     private String password;
     private Role role;
+    private Boolean blocked;
 
     public User() {
     }
 
-    public User(String username, String password, Role role) {
+    public User(String username, String password, Role role, Boolean blocked) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.blocked = blocked;
     }
 
     public String getUsername() {
@@ -38,5 +40,13 @@ public class User extends Entity<Long> {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Boolean getBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(Boolean blocked) {
+        this.blocked = blocked;
     }
 }

@@ -27,7 +27,7 @@ public class LoginServiceImpl implements LoginService {
         Optional<User> result = userRepository.findByUsername(username);
         if (result.isEmpty()) {
             Role role = username.startsWith(ADMIN_NAME_PREFIX) ? Role.ADMIN : Role.USER;
-            User user = new User(username, loginDto.getPassword(), role);
+            User user = new User(username, loginDto.getPassword(), role, false);
             return tokenService.registerToken(userRepository.save(user));
         } else if (result.get().getPassword().equals(loginDto.getPassword())) {
             return tokenService.registerToken(result.get());

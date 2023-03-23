@@ -1,7 +1,9 @@
 package home.serg.chatik.dao;
 
+import java.util.Optional;
+
 public interface DAO<T, E> {
-    T findById(E id);
+    Optional<T> findById(E id);
 
     T save(T entity);
 
