@@ -9,13 +9,13 @@ public enum DaoContext {
     USER_REPOSITORY(new UserRepository()),
     TOKEN_REPOSITORY(new TokenRepository());
 
-    private final DAO<? extends Entity<?>, ?> dao;
+    private final DAO<?, ?> dao;
 
-    DaoContext(DAO<? extends Entity<?>, ?> dao) {
+    DaoContext(DAO<?, ?> dao) {
         this.dao = dao;
     }
 
-    public DAO<? extends Entity<?>, ?> getInstance() {
+    public DAO<?, ?> getInstance() {
         return dao;
     }
 }
