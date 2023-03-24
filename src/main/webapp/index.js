@@ -40,7 +40,7 @@ logoutButton.addEventListener('click', logout);
 function startChat(token) {
     if (!token) return;
     hideLoginForm(true);
-    const socketUrl = 'ws://' + HOST + CHAT_URI;
+    const socketUrl = 'ws://' + HOST + CHAT_URI + '?token=' + token;
     socket = new WebSocket(socketUrl);
     socket.onopen = socketOnOpen;
     socket.onerror = socketOnError;
@@ -80,7 +80,7 @@ function getMessageElement(name, text) {
 }
 
 function socketOnOpen() {
-    sendMessage(token);
+    // sendMessage(token);
     messageButton.onclick = () => {
         sendMessage(messageText.value);
         messageText.value = '';

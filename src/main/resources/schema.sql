@@ -17,3 +17,9 @@ CREATE TABLE IF NOT EXISTS token (
     user_id BIGINT NOT NULL REFERENCES users(id),
     PRIMARY KEY (id)
 );
+CREATE TABLE IF NOT EXISTS message (
+    id BIGINT GENERATED ALWAYS AS IDENTITY,
+    message TEXT,
+    user_id BIGINT NOT NULL REFERENCES users(id),
+    PRIMARY KEY (id)
+);

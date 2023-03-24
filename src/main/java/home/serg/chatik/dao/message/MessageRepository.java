@@ -1,16 +1,19 @@
-package home.serg.chatik.dao.user;
+package home.serg.chatik.dao.message;
 
 import home.serg.chatik.dao.DAO;
+import home.serg.chatik.dao.user.Role;
+import home.serg.chatik.dao.user.User;
 import home.serg.chatik.util.ConnectionPool;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-public class UserRepository implements DAO<User, Long> {
-
+public class MessageRepository implements DAO<Message, Long> {
     @Override
-    public Optional<User> findById(Long id) {
-        String sql = "SELECT u.*, r.name FROM users AS u JOIN role AS r ON r.id=u.role_id WHERE u.id=?";
+    public Optional<Message> findById(Long id) {
+        String sql = "SELECT m.*, u.*, r.name FROM message AS m JOIN users AS u ON u.id=m.user_id JOIN role AS r ON r.id=u.role_id WHERE t.id=?";
         try (
                 Connection connection = ConnectionPool.get();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -18,8 +21,8 @@ public class UserRepository implements DAO<User, Long> {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.next()) return Optional.empty();
-            User user = mapToUser(resultSet);
-            return Optional.of(user);
+            Message message = mapToMessage(resultSet);
+            return Optional.of(message);
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
@@ -27,16 +30,14 @@ public class UserRepository implements DAO<User, Long> {
     }
 
     @Override
-    public User save(User entity) {
-        String sql = "INSERT INTO users (username, password, role_id, blocked) VALUES (?,?,(SELECT id FROM role WHERE name=?),?)";
+    public Message save(Message entity) {
+        String sql = "INSERT INTO message (message, user_id) VALUES (?,?)";
         try (
                 Connection connection = ConnectionPool.get();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ) {
-            preparedStatement.setString(1, entity.getUsername());
-            preparedStatement.setString(2, entity.getPassword());
-            preparedStatement.setString(3, entity.getRole().name());
-            preparedStatement.setBoolean(4, entity.getBlocked());
+            preparedStatement.setString(1, entity.getMessage());
+            preparedStatement.setLong(2, entity.getUser().getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows != 1) throw new SQLException("Affected rows not equals 1");
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
@@ -50,17 +51,14 @@ public class UserRepository implements DAO<User, Long> {
     }
 
     @Override
-    public User update(User entity) {
-        String sql = "UPDATE users SET username=?, password=?, role_id=(SELECT id FROM role WHERE name=?), blocked=? WHERE id=?";
+    public Message update(Message entity) {
+        String sql = "UPDATE message SET message=? WHERE id=?";
         try (
                 Connection connection = ConnectionPool.get();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ) {
-            preparedStatement.setString(1, entity.getUsername());
-            preparedStatement.setString(2, entity.getPassword());
-            preparedStatement.setString(3, entity.getRole().name());
-            preparedStatement.setBoolean(4, entity.getBlocked());
-            preparedStatement.setLong(5, entity.getId());
+            preparedStatement.setString(1, entity.getMessage());
+            preparedStatement.setLong(2, entity.getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows < 1) throw new SQLException("Update failed");
             return entity;
@@ -72,7 +70,7 @@ public class UserRepository implements DAO<User, Long> {
 
     @Override
     public boolean deleteById(Long id) {
-        String sql = "DELETE FROM users WHERE id=?";
+        String sql = "DELETE FROM message WHERE id=?";
         try (
                 Connection connection = ConnectionPool.get();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -86,30 +84,39 @@ public class UserRepository implements DAO<User, Long> {
         }
     }
 
-    public Optional<User> findByUsername(String username) {
-        String sql = "SELECT u.*, r.name FROM users AS u JOIN role AS r ON r.id=u.role_id WHERE u.username=?";
+    public List<Message> getLastMessages(int count) {
+        String sql = "SELECT m.*, u.*, r.name FROM message AS m " +
+                "JOIN users AS u ON u.id=m.user_id " +
+                "JOIN role AS r ON r.id=u.role_id " +
+                "ORDER BY m.id DESC LIMIT ?";
+        List<Message> messages = new ArrayList<>();
         try (
                 Connection connection = ConnectionPool.get();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ) {
-            preparedStatement.setString(1, username);
+            preparedStatement.setLong(1, count);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()) return Optional.empty();
-            User user = mapToUser(resultSet);
-            return Optional.of(user);
+            while (resultSet.next()){
+                messages.add(mapToMessage(resultSet));
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
         }
+        return messages;
     }
 
-    private User mapToUser(ResultSet resultSet) throws SQLException {
+    private Message mapToMessage(ResultSet resultSet) throws SQLException {
+        Message message = new Message();
         User user = new User();
-        user.setId(resultSet.getLong("id"));
-        user.setUsername(resultSet.getString("username"));
-        user.setPassword(resultSet.getString("password"));
-        user.setBlocked(resultSet.getBoolean("blocked"));
-        user.setRole(Role.valueOf(resultSet.getString("name")));
-        return user;
+        user.setId(resultSet.getLong(4));
+        user.setUsername(resultSet.getString(5));
+        user.setPassword(resultSet.getString(6));
+        user.setBlocked(resultSet.getBoolean(8));
+        user.setRole(Role.valueOf(resultSet.getString(9)));
+        message.setId(resultSet.getLong(1));
+        message.setMessage(resultSet.getString(2));
+        message.setUser(user);
+        return message;
     }
 }

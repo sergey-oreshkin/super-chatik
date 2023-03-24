@@ -20,7 +20,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public TokenDto registerToken(User user) {
         Optional<Token> result = tokenRepository.getByUserId(user.getId());
-        if (result.isEmpty()){
+        if (result.isEmpty()) {
             return tokenMapper.toDto(tokenRepository.save(new Token(getNewToken(), user)));
         }
         Token token = result.get();
@@ -31,11 +31,11 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public String getUsername(String token) {
         return tokenRepository.getByToken(token)
-                .orElseThrow(()-> new TokenNotFoundException("Token not found"))
+                .orElseThrow(() -> new TokenNotFoundException("Token not found"))
                 .getUser().getUsername();
     }
 
-    private String getNewToken(){
+    private String getNewToken() {
         return UUID.randomUUID().toString();
     }
 }

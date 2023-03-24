@@ -22,6 +22,7 @@ public class TokenRepository implements DAO<Token, Long> {
             Token token = mapToToken(resultSet);
             return Optional.of(token);
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new RuntimeException(ex);
         }
     }
@@ -42,6 +43,7 @@ public class TokenRepository implements DAO<Token, Long> {
             entity.setId(generatedKeys.getLong(1));
             return entity;
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new RuntimeException(ex);
         }
     }
@@ -54,11 +56,12 @@ public class TokenRepository implements DAO<Token, Long> {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ) {
             preparedStatement.setString(1, entity.getToken());
-            preparedStatement.setLong(5, entity.getId());
+            preparedStatement.setLong(2, entity.getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows < 1) throw new SQLException("Update failed");
             return entity;
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new RuntimeException(ex);
         }
     }
@@ -72,9 +75,9 @@ public class TokenRepository implements DAO<Token, Long> {
         ) {
             preparedStatement.setLong(1, id);
             int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows < 1) return false;
-            return true;
+            return affectedRows >= 1;
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new RuntimeException(ex);
         }
     }
@@ -91,6 +94,7 @@ public class TokenRepository implements DAO<Token, Long> {
             Token tokenEntity = mapToToken(resultSet);
             return Optional.of(tokenEntity);
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new RuntimeException(ex);
         }
     }
@@ -107,6 +111,7 @@ public class TokenRepository implements DAO<Token, Long> {
             Token tokenEntity = mapToToken(resultSet);
             return Optional.of(tokenEntity);
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new RuntimeException(ex);
         }
     }

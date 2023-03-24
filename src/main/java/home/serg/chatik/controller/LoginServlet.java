@@ -26,20 +26,25 @@ public class LoginServlet extends HttpServlet {
     private final LoginService loginService = LoginContext.LOGIN_SERVICE.getInstance();
 
     @Override
+    public void init() throws ServletException {
+        super.init();
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try (BufferedReader reader = req.getReader()) {
             String body = reader.lines().collect(Collectors.joining(" "));
             LoginDto loginDto = mapper.readValue(body, LoginDto.class);
             TokenDto tokenDto = loginService.login(loginDto);
             PrintWriter writer = resp.getWriter();
-            resp.setStatus(200);
+            resp.setStatus(HttpServletResponse.SC_OK);
             resp.setContentType("application/json");
             writer.print(mapper.writeValueAsString(tokenDto));
             writer.flush();
         } catch (AuthorizationException ex) {
-            resp.setStatus(403);
-        } catch (ValidationException | JsonProcessingException ex){
-            resp.setStatus(400);
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+        } catch (ValidationException | JsonProcessingException ex) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 }
