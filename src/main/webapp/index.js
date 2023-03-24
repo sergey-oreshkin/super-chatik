@@ -55,7 +55,7 @@ function socketOnMessage(message) {
 
 function showNewMessage(message) {
     if (isMessageFirst) {
-        message.map((msg) => {
+        message.reverse().map((msg) => {
             messages.appendChild(getMessageElement(msg.name, msg.text));
         });
         isMessageFirst = false;
