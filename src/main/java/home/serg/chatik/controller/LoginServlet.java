@@ -26,11 +26,6 @@ public class LoginServlet extends HttpServlet {
     private final LoginService loginService = LoginContext.LOGIN_SERVICE.getInstance();
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-    }
-
-    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try (BufferedReader reader = req.getReader()) {
             String body = reader.lines().collect(Collectors.joining(" "));
