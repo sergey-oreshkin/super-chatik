@@ -63,7 +63,9 @@ public class UserRepository implements DAO<User, Long> {
             preparedStatement.setLong(5, entity.getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows < 1) throw new SQLException("Update failed");
-            return entity;
+            User user = new User(entity.getUsername(), entity.getPassword(), entity.getRole(), entity.getBlocked());
+            user.setId(entity.getId());
+            return user;
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);

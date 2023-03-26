@@ -8,7 +8,10 @@ import home.serg.chatik.util.ConnectionPool;
 import java.sql.*;
 
 public class TestUtil {
-    public static final String WRONG_PASSWORD = "wrong";
+    public static final long DEFAULT_USER_ID = 1L;
+    public static final long WRONG_ID = 33L;
+    public static final String WRONG_USER_NAME="wrong name";
+    public static final String WRONG_PASSWORD = "wrong pass";
     public static final String EXISTING_USER_NAME = "user";
     public static final String EXISTING_USER_PASSWORD = "pass";
     public static final Role EXISTING_USER_ROLE = Role.USER;

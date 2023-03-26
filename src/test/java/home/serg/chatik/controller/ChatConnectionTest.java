@@ -33,14 +33,14 @@ class ChatConnectionTest {
     private final ChatConnection connection = new ChatConnection();
 
     @BeforeAll
-    public static void initDatabase() {
+    public static void initDb() {
         initDbWithOneUser();
         addBlockedUser();
     }
 
     @AfterAll
-    public static void clearDatabase() {
-        TestUtil.clearDatabase();
+    public static void clearDb() {
+        clearDatabase();
     }
 
     private static void addBlockedUser() {

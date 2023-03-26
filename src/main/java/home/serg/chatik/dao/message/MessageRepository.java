@@ -13,7 +13,7 @@ import java.util.Optional;
 public class MessageRepository implements DAO<Message, Long> {
     @Override
     public Optional<Message> findById(Long id) {
-        String sql = "SELECT m.*, u.*, r.name FROM message AS m JOIN users AS u ON u.id=m.user_id JOIN role AS r ON r.id=u.role_id WHERE t.id=?";
+        String sql = "SELECT m.*, u.*, r.name FROM message AS m JOIN users AS u ON u.id=m.user_id JOIN role AS r ON r.id=u.role_id WHERE m.id=?";
         try (
                 Connection connection = ConnectionPool.get();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
