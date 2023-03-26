@@ -1,0 +1,14 @@
+version: '3.0'
+services:
+
+  tomcat:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    ports:
+      - "8085:8080"
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=pass
