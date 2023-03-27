@@ -1,0 +1,104 @@
+*, body, div {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+h2 {
+    text-align:center;
+}
+
+.hide {
+    display: none;
+}
+
+button {
+    padding: 5px;
+    background-color: #9f9;
+    border-radius: 15px;
+    font-weight: bold;
+    box-shadow: 4px 4px 5px 0 #8a5;
+}
+
+input {
+    padding: 5px;
+    border-radius: 5px;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+button:active {
+    box-shadow: 2px 2px 0 0 #8a5;
+    transform: translate(2px, 2px);
+}
+
+.root {
+    margin: 0 auto;
+    padding-top: 12px;
+    max-width: 900px;
+    height: 100vh;
+    background-color: #afc;
+}
+
+.login-form {
+    font-size: larger;
+    font-family: serif;
+    border: 2px solid black;
+    border-radius: 15px;
+    text-align: center;
+    margin: 120px auto;
+    width: 400px;
+}
+
+.login-form * {
+    margin: 5px 1px;
+    font-size: 24px;
+}
+
+.error-message {
+    color: red;
+}
+
+header {
+    text-align: right;
+}
+
+.chatbox {
+    height: 80vh;
+    padding: 20px;
+}
+.chatbox * {
+    margin: 7px;
+}
+
+.chatbox input {
+    width: 90%;
+}
+
+.messages {
+    overflow-y: scroll;
+    height: 70vh;
+}
+
+.message {
+    display: flex;
+}
+
+.name {
+    font-weight: bold;
+    width: 13%;
+    text-align: right;
+    font-size: 1.2em;
+}
+
+.text {
+    font-family: sans-serif;
+    width: 85%;
+    border: 1px solid black;
+    padding: 4px;
+    border-radius: 7px;
+    background-color: #eee;
+}

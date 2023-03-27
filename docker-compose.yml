@@ -1,0 +1,12 @@
+version: '3.0'
+services:
+
+  tomcat:
+    build: .
+    ports:
+      - "8085:8080"
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=pass
