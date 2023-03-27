@@ -5,6 +5,10 @@
     overflow: hidden;
 }
 
+h2 {
+    text-align:center;
+}
+
 .hide {
     display: none;
 }
